@@ -10,8 +10,6 @@ var user = new Schema({
   email: { type: String, min: 5, max: 20, required: true },
   mobile: { type: Number, min: 10, max: 10, required: true },
   gender: { type: String, enum: ["M", "F", "O"], required: true },
-  food: { type: String, enum: ["VEG", "NON-VEG"], required: true },
-  bedroll: { type: Boolean, required: true },
   trains_booked: [{ type: Schema.Types.ObjectId, ref: "Train" }]
 });
 
