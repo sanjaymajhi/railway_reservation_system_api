@@ -1,0 +1,19 @@
+{
+  "name": "railway_reservation_system",
+  "version": "1.0.0",
+  "description": "it is a system develop to book train tickets by passengers.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanjaymajhi/railway_reservation_system.git"
+  },
+  "author": "Sanjay Majhi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sanjaymajhi/railway_reservation_system/issues"
+  },
+  "homepage": "https://github.com/sanjaymajhi/railway_reservation_system#readme"
+}
