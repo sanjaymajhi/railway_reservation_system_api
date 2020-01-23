@@ -10,7 +10,8 @@ var user = new Schema({
   email: { type: String, min: 5, max: 20, required: true },
   mobile: { type: Number, min: 10, max: 10, required: true },
   gender: { type: String, enum: ["M", "F", "O"], required: true },
-  trains_booked: [{ type: Schema.Types.ObjectId, ref: "Train" }]
+  trains_booked: [{ type: Schema.Types.ObjectId, ref: "Train" }],
+  admin: { type: Boolean, required: true }
 });
 
 module.exports = mongoose.model("User", user);
