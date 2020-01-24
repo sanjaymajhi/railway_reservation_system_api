@@ -1,8 +1,59 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+* {
+  box-sizing: border-box;
+  text-align: center;
+}
+
+nav {
+  display: flex;
+  background-color: lightgray;
+}
+
+.icon {
+  width: 50px;
+  border-radius: 50%;
 }
 
 a {
-  color: #00B7FF;
+  text-decoration: none;
+}
+
+nav div {
+  width: 50%;
+}
+
+#navdiv {
+  display: flex;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  display: block;
+  padding: 10px;
+}
+
+#register_form {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 10px;
+  margin: auto 20%;
+}
+
+#errors {
+  margin: auto;
+  width: 50%;
+  border: 1px solid black;
+}
+
+#login_form {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 10px;
+  margin: auto 20%;
+}
+
+#errors li {
+  text-align: left;
 }

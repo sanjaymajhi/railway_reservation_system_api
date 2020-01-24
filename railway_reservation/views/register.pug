@@ -1,0 +1,45 @@
+extends layout
+
+block content
+  h1=title
+  form#register_form(action="/user/register/", method="post")
+    label(for="f_name") First Name : 
+    input#f_name(type="text", name="f_name")
+
+    label(for="l_name") Last Name : 
+    input#l_name(type="text", name="l_name")
+
+    label(for="username") Username : 
+    input#username(type="text", name="username")
+
+    label(for="dob") Date of Birth : 
+    input#dob(type="date", name="dob")
+
+    label(for="password") Password : 
+    input#password(type="password", name="password")
+
+    label(for="email") Email : 
+    input#email(type="email", name="email")
+
+    label(for="mobile") Mobile Number : 
+    input#mobile(type="text", name="mobile")
+
+    label(for="gender") Gender :
+    select#gender(name="gender")
+      option(value="" selected disabled) Select your Gender
+      option(value="M") Male
+      option(value="F") Female
+      option(value="O") Others
+
+    input(type="submit", value="Register")
+  br
+  br
+  div#errors
+    if user_error==1
+      h1 Errors : 
+      p User already exists
+    if errors
+      h1 Errors : 
+      ul
+        each error in errors
+          li=error.msg

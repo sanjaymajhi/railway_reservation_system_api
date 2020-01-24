@@ -7,11 +7,11 @@ var user = new Schema({
   dob: { type: Date, required: true, max: Date("2002/12/31") },
   username: { type: String, min: 5, max: 10, required: true },
   password: { type: String, min: 8, max: 15, required: true },
-  email: { type: String, min: 5, max: 20, required: true },
-  mobile: { type: Number, min: 10, max: 10, required: true },
+  email: { type: String, required: true },
+  mobile: { type: Number, required: true },
   gender: { type: String, enum: ["M", "F", "O"], required: true },
   trains_booked: [{ type: Schema.Types.ObjectId, ref: "Train" }],
   admin: { type: Boolean, required: true }
 });
 
-module.exports = mongoose.model("User", user);
+module.exports = mongoose.model("User_railway", user);

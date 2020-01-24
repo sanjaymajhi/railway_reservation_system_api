@@ -1,7 +1,25 @@
-doctype html
-html
+<!DOCTYPE html>
+html(lang="en")
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    link(rel="stylesheet", href="/stylesheets/style.css")
+    title #{title}
+    script(src="https://www.google.com/recaptcha/api.js")
   body
-    block content
+    main
+      nav
+        div
+          img.icon(src="/images/railways.png", alt="indian railways image")
+        ul#navdiv
+          li 
+            a(href="/contact") Contact Us
+          li 
+            a(href="/users/login") Login
+          li
+            a(href="/users/register") Register
+          li
+            img.icon(src="/images/irctc_icon.jpeg", alt="IRCTC icon")
+      div
+        block content

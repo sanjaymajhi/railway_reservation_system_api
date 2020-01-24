@@ -1,0 +1,23 @@
+extends layout
+
+block content
+
+  h1=title
+  form#login_form(action="/user/login/", method="post")
+    label(for="email") Email ID : 
+    input#email(type="email", name="email")
+    label(for="password") Password : 
+    input#password(type="text", name="password")
+    div
+    div.g-recaptcha(data-sitekey="6LdMetIUAAAAALN5cER-Dg7G1dF64-CFHG1F73zW")
+    div
+    input(type="submit", value="Login")
+
+  if errors
+    h1 Errors : 
+    ul
+      each error in errors
+        li=error.msg
+
+  if user_error
+    h1 Error : username or password incorrect
