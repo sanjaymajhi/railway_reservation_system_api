@@ -1,20 +1,42 @@
 var async = require("async");
 var mongoose = require("mongoose");
 
-exports.train_detail = () => {};
+exports.train_list = (req, res) => {
+  res.send("ok");
+};
 
-exports.train_create_get = () => {};
+exports.train_detail = (req, res) => {
+  res.send("ok");
+};
 
-exports.train_create_post = () => {};
+exports.train_create_get = (req, res) => {
+  res.send("ok");
+};
 
-exports.train_update_get = () => {};
+exports.train_create_post = (req, res) => {
+  res.send("ok");
+};
 
-exports.train_update_post = () => {};
+exports.train_update_get = (req, res) => {
+  res.send("ok");
+};
 
-exports.train_delete_get = () => {};
+exports.train_update_post = (req, res) => {
+  res.send("ok");
+};
 
-exports.train_delete_post = () => {};
+exports.train_delete_get = (req, res) => {
+  res.send("ok");
+};
 
-exports.train_book_get = () => {};
+exports.train_delete_post = (req, res) => {
+  res.send("ok");
+};
 
-exports.train_book_post = () => {};
+exports.train_book_get = (req, res) => {
+  res.send("ok");
+};
+
+exports.train_book_post = (req, res) => {
+  res.send("ok");
+};

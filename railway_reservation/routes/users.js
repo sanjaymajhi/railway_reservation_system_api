@@ -1,17 +1,22 @@
 var express = require("express");
-var router = express.Router();
+var Router = express.Router();
+
+var userController = require("../controller/userController");
 
 /* GET users listing. */
-router.get("/", function(req, res, next) {
-  res.send("respond with a resource");
+Router.get("/", function(req, res, next) {
+  res.send("ok");
 });
 
 Router.get("/:id/", userController.user_detail);
 
-Router.get("/create/", userController.user_create_get);
-Router.post("/create/", userController.user_create_post);
+Router.get("/create/", userController.user_register_get);
+Router.post("/create/", userController.user_register_post);
 
 Router.get("/:id/update/", userController.user_update_get);
 Router.post("/:id/update/", userController.user_update_post);
 
-module.exports = router;
+Router.get("/login/", userController.user_login_get);
+Router.post("/login/", userController.user_login_post);
+
+module.exports = Router;
