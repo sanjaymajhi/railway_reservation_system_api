@@ -124,18 +124,7 @@ exports.user_register_post = [
               console.log("Email sent : " + info.response);
             }
           });
-          var payload = {
-            user: {
-              id: user._id
-            }
-          };
-
-          jwt.sign(payload, "sanjay", { expiresIn: 10000 }, (err, token) => {
-            if (err) {
-              return next(err);
-            }
-            res.json({ token });
-          });
+          res.render("login", { title: "Login Page" });
         });
       }
     });
