@@ -7,6 +7,7 @@ html(lang="en")
     link(rel="stylesheet", href="/stylesheets/style.css")
     title #{title}
     script(src="https://www.google.com/recaptcha/api.js")
+    
   body
     main
       nav
@@ -22,4 +23,6 @@ html(lang="en")
           li
             img.icon(src="/images/irctc_icon.jpeg", alt="IRCTC icon")
       div
+        form#token_submit(action="/user/profile", method="post")
+          input(type="hidden", name="token" value="")
         block content

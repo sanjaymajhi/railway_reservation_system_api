@@ -13,8 +13,10 @@ var BodyParser = require("body-parser");
 //for recaptcha
 var Request = require("request");
 
-exports.user_detail = (req, res) => {
-  res.send("ok");
+exports.profile = (req, res) => {
+  User.findById(req.user_detail.id).exec((err, details) => {
+    res.render("profile", { title: "Profile Page", user: details, profile: 1 });
+  });
 };
 
 exports.user_register_get = (req, res) => {
@@ -211,7 +213,7 @@ exports.user_login_post = [
                   if (err) {
                     return next(err);
                   }
-                  res.status(200).send({ token });
+                  res.status(200).json(token);
                 }
               );
             }

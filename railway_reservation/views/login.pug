@@ -1,13 +1,14 @@
 extends layout
 
 block content
+  
 
   h1=title
-  form#login_form(action="/user/login/", method="post")
+  form#login_form(action="javascript:form_submit(this)")
     label(for="email") Email ID : 
-    input#email(type="email", name="email")
+    input#email(type="email", name="email" value="5851sanmansljdk554@gmail.com")
     label(for="password") Password : 
-    input#password(type="text", name="password")
+    input#password(type="text", name="password" value="0147258369")
     div
     div.g-recaptcha(data-sitekey="6LdMetIUAAAAALN5cER-Dg7G1dF64-CFHG1F73zW")
     div
@@ -21,3 +22,5 @@ block content
 
   if user_error
     h1 Error : username or password incorrect
+
+  script(src="/javascripts/client_side.js")
