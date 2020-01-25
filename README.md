@@ -2,4 +2,4 @@
 
 It is a railway ticket booking system being made by me.
 It is not complete yet.
-Coding is i progress.
+Coding is in progress.
