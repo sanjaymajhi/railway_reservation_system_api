@@ -21,7 +21,8 @@ nav div {
   width: 50%;
 }
 
-#navdiv {
+#navdiv1,
+#navdiv2 {
   display: flex;
 }
 

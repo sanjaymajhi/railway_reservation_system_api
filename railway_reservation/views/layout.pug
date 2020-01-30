@@ -5,6 +5,7 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     meta(http-equiv="X-UA-Compatible", content="ie=edge")
     link(rel="stylesheet", href="/stylesheets/style.css")
+    link(rel="stylesheet", href="/stylesheets/home.css")
     title #{title}
     script(src="https://www.google.com/recaptcha/api.js")
     
@@ -13,13 +14,22 @@ html(lang="en")
       nav
         div
           img.icon(src="/images/railways.png", alt="indian railways image")
-        ul#navdiv
+        ul#navdiv1
           li 
             a(href="/contact") Contact Us
           li 
-            a(href="/users/login") Login
+            a(href="/user/login") Login
           li
-            a(href="/users/register") Register
+            a(href="/user/register") Register
+          li
+            img.icon(src="/images/irctc_icon.jpeg", alt="IRCTC icon")
+        ul#navdiv2
+          li 
+            a(href="javascript:gettopost(this,'/user/profile')") profile
+          li 
+            a(href="/contact") Contact Us
+          li 
+            a(href="javascript:logout(this)") Log Out
           li
             img.icon(src="/images/irctc_icon.jpeg", alt="IRCTC icon")
       div

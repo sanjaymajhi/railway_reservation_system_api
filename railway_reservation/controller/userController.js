@@ -15,7 +15,15 @@ var Request = require("request");
 
 exports.profile = (req, res) => {
   User.findById(req.user_detail.id).exec((err, details) => {
-    res.render("profile", { title: "Profile Page", user: details, profile: 1 });
+    if (details) {
+      res.render("profile", {
+        title: "Profile Page",
+        user: details,
+        profile: 1
+      });
+    } else {
+      res.send("no token");
+    }
   });
 };
 
@@ -131,16 +139,119 @@ exports.user_register_post = [
   }
 ];
 
-exports.user_update_get = (req, res) => {
-  res.send("ok");
-};
-exports.user_update_post = (req, res) => {
-  res.send("ok");
-};
+exports.user_update_post = [
+  validator
+    .body("f_name", "Invalid First Name")
+    .trim()
+    .isLength({ min: 5, max: 20 }),
+  validator
+    .body("l_name", "Invalid Last Name")
+    .trim()
+    .isLength({ min: 5, max: 20 }),
+  validator
+    .body("username", "Invalid Username")
+    .trim()
+    .isLength({ min: 5, max: 10 })
+    .isAlphanumeric()
+    .withMessage("Only Alpha numeric charcaters allowed"),
+  validator
+    .body("dob", "Invalid date")
+    .trim()
+    .isISO8601(),
+  validator
+    .body("password", "password length min 8 and max 15")
+    .trim()
+    .isLength({ min: 8, max: 15 }),
+  validator
+    .body("email", "Invalid Email")
+    .trim()
+    .isEmail(),
+  validator
+    .body("mobile", "Invalid Mobile")
+    .trim()
+    .isLength({ min: 10, max: 10 }),
+
+  validator.sanitizeBody("f_name").escape(),
+  validator.sanitizeBody("l_name").escape(),
+  validator.sanitizeBody("mobile").escape(),
+  validator.sanitizeBody("username").escape(),
+
+  (req, res, next) => {
+    const errors = validator.validationResult(req);
+    if (!errors.isEmpty()) {
+      res.render("profile", {
+        title: "Profile Page",
+        errors: errors.array()
+      });
+
+      return;
+    }
+
+    User.findOne({ email: req.body.email }, "email").exec(
+      async (err, result) => {
+        if (err) {
+          return next(err);
+        }
+        if (result.email != req.body.email) {
+          res.render("profile", { title: "Profile Page", user_error: 1 });
+          return;
+        } else {
+          var salt = await bcrypt.genSalt(10);
+          var password = await bcrypt.hash(req.body.password, salt);
+
+          var user = new User({
+            f_name: req.body.f_name,
+            l_name: req.body.l_name,
+            dob: req.body.dob,
+            mobile: req.body.mobile,
+            username: req.body.username,
+            password: password,
+            gender: req.body.gender,
+            email: req.body.email,
+            _id: result._id
+          });
+
+          await User.findByIdAndUpdate(user._id, user, err => {
+            if (err) {
+              return next(err);
+            }
+            var transporter = nodemailer.createTransport({
+              service: "gmail",
+              auth: {
+                user: "web.developer.sanjay.majhi@gmail.com",
+                pass: "Qwerty12345*"
+              }
+            });
+
+            var mailoption = {
+              from: "web.developer.sanjay.majhi@gmail.com",
+              to: user.email,
+              subject: "Profile Updated",
+              text:
+                "Hey " +
+                user.f_name +
+                " , your profile has been successfully updated. \nThanks from Sanjay Majhi"
+            };
+
+            transporter.sendMail(mailoption, (err, info) => {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log("Email sent : " + info.response);
+              }
+            });
+            res.json({ updated: "success" });
+          });
+        }
+      }
+    );
+  }
+];
 
 exports.user_login_get = (req, res) => {
   res.render("login", { title: "Login Page" });
 };
+
 exports.user_login_post = [
   validator
     .body("email", "Invalid Username or Password")

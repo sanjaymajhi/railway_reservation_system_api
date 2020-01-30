@@ -2,7 +2,7 @@ extends layout
 
 block content
   h1=title
-  form#register_form(action="/user/register/", method="post")
+  form#register_form(action=profile===undefined?"/user/register/":"javascript:update_form_submit(this)", method="post")
     label(for="f_name") First Name : 
     input#f_name(type="text", name="f_name",value=(user===undefined?"":user.f_name))
 
@@ -13,7 +13,7 @@ block content
     input#username(type="text", name="username",value=(user===undefined?"":user.username))
 
     label(for="dob") Date of Birth : 
-    input#dob(type="date", name="dob",value=(user===undefined?"":user.dob))
+    input#dob(type="date", name="dob",value=(user===undefined?"":user.DOB))
 
     label(for="password") Password : 
     input#password(type="password", name="password")
@@ -26,12 +26,14 @@ block content
 
     label(for="gender") Gender :
     select#gender(name="gender")
-      option(value="" selected=(user===undefined?"selected":"") disabled) Select your Gender
-      option(value="M" selected=(user===undefined?"":"selected")) Male
-      option(value="F" selected=(user===undefined?"":"selected")) Female
-      option(value="O" selected=(user===undefined?"":"selected")) Others
+      option(value="" selected=(user===undefined?"selected":false) disabled) Select your Gender
+      option(value="M" selected=(user===undefined?false:user.gender==="M"?true:false)) Male
+      option(value="F" selected=(user===undefined?false:user.gender==="F"?"selected":false)) Female
+      option(value="O" selected=(user===undefined?false:user.gender==="O"?"selected":false)) Others
     if profile!=1
       input(type="submit", value="Register")
+    else
+      input(type="submit", value="Update")
   br
   br
   div#errors
@@ -43,3 +45,4 @@ block content
       ul
         each error in errors
           li=error.msg
+  script(src="/javascripts/user_auth.js")

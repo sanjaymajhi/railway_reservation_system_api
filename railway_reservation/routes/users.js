@@ -14,8 +14,8 @@ Router.get("/login/", userController.user_login_get);
 Router.post("/login/", userController.user_login_post);
 
 Router.post("/profile", auth, userController.profile);
+Router.get("/profile", auth, userController.profile);
 
-Router.get("/:id/update/", userController.user_update_get);
-Router.post("/:id/update/", userController.user_update_post);
+Router.post("/update/", userController.user_update_post);
 
 module.exports = Router;

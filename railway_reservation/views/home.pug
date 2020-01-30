@@ -1,90 +1,80 @@
-<!DOCTYPE html>
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    meta(http-equiv="X-UA-Compatible", content="ie=edge")
-    title Document
-    link(rel="stylesheet", href="stylesheets/home.css")
-  body
-    main
-      nav
-        img(src="images/railways.png", alt="railways icon")
-        a(href="/user/login/") Login &emsp;
-        a(href="/user/register/") SignUp &emsp;
-        a(href="/contact") Contact Us &emsp;
-        img(src="images/irctc_icon.jpeg", alt="")
-      div#search-container
-        div#search
-          form(action="/search", method="post")
-            p#bold Book your ticket
-            img(src="images/rail_icon.png", alt="rail icon")
-            br 
-            br
-            select(name="")
-              option(value="" selected disabled) From *
-            br 
-            br
-            select(name="")
-              option(value="" disabled selected) To *
-            br 
-            br
-            input(type="date", name="")
-            br 
-            br
-            select(name="")
-              option(value="" disabled selected) Classes *
-            br 
-            br
-            input(type="submit", value="Search")
-        div#rightofsearch
-          h1 INDIAN RAILWAYS
-          h2 Safety  Security  Punctuality
-      div.ad
-        h1 Call for advertisement
-      div#services-container
-        h1 Have you not found the right one?
-        h1 Find a service suitable for you here.
-        div#services
-          h3 flights
-          h3 stays
-          h3 rail dristhi
-          h3 e-catering
-          h3 holiday packages
-          h3 tourist train
-          h3 hill railway
-          h3 chapter train
-          h3 gallery
-      div.ad
-        h1 Call for advertisement
-      div#holidays-container
-        div
-          img(src="images/exterior.jpg", alt="maharaja express image")
-          h2 Maharaja's Express
-          p Redefining Royalty, Luxury and Comfort, Maharajas’ express takes you on a sojourn to the era of bygone stately splendour of princely states. Sylvan furnishings, elegant ambience and modern amenities are amalgamated for an “Experience Unsurpassed”. It has been a winner of “World’s Leading Luxury train” by World Travel Awards consecutively for last six years.
-        div
-          img(src="images/Thailand.jpg", alt="Thailand image")
-          h2 International Packages
-          p Best deals in International Holiday packages, handpicked by IRCTC, for Thailand, Dubai, Sri Lanka, Hong Kong, China, Macau, Bhutan, Nepal, U.K., Europe, USA, Australia etc. The packages are inclusive of sightseeing, meals, visa charges and overseas medical insurance to give you a hassle-free and memorable experience.
-        div
-          img(src="images/Manali.jpg", alt="Manali image")
-          h2 Domestic Air Packages
-          p Be it the spiritual devotee seeking blessings of Tirupati, Shirdi or Mata Vaishno Devi or the leisure traveller wanting to relish the Blue mountains of North East, Sand-dunes of Rajasthan, Hamlets of Ladakh, Wonders of Himalayas, Serene lakes or Picturesque Islands, IRCTC has it all. Discover India through IRCTC!
-        div
-          img(src="images/Buddha.png", alt="Buddha image")
-          h2 Buddhist Circuit Tourist Train
-          p India, the country where Buddhism originated has rich memories of the Buddhist legacy. As part of its drive towards austerity, the only kind of art & architecture that it supported were Stupas, Chaityas & Viharas. Buddhist Train India will help you visit all these places up close for a truly religious experience.
-        div
-          img(src="images/Kashmir.jpg", alt="Kashmir valley image")
-          h2 Rail Tour Packages
-          p IRCTC offers Exclusive Rail tour packages with confirmed train tickets, sight-seeing and meals for enchanting Nilgiri Mountains, Darjeeling, Kullu Manali, Kashmir, Gangtok or divine tours of Mata Vaishno Devi, Rameswaram, Madurai, Shirdi, Tirupati etc. Holiday packages/ Land packages to these destinations are also available.
-        div
-          img#bottlead(src="images/imgad.jpeg", alt="advertisement image")
-      div#contact
-        img(src="", alt="")
-        a(href="") Facebook &emsp; &emsp;
-        img(src="", alt="")
-        a(href="") Twitter
-      div#footer
-        p Copyright © 2020 - www.irctc.co.in. All Rights Reserved
-        p Designed and Hosted by CRIS
+extends layout
+
+block content
+
+  main
+    div#search-container
+      div#search
+        form(action="/search", method="post")
+          p#bold Book your ticket
+          img(src="images/rail_icon.png", alt="rail icon")
+          br 
+          br
+          select(name="")
+            option(value="" selected disabled) From *
+          br 
+          br
+          select(name="")
+            option(value="" disabled selected) To *
+          br 
+          br
+          input(type="date", name="")
+          br 
+          br
+          select(name="")
+            option(value="" disabled selected) Classes *
+          br 
+          br
+          input(type="submit", value="Search")
+      div#rightofsearch
+        h1 INDIAN RAILWAYS
+        h2 Safety  Security  Punctuality
+    div.ad
+      h1 Call for advertisement
+    div#services-container
+      h1 Have you not found the right one?
+      h1 Find a service suitable for you here.
+      div#services
+        h3 flights
+        h3 stays
+        h3 rail dristhi
+        h3 e-catering
+        h3 holiday packages
+        h3 tourist train
+        h3 hill railway
+        h3 chapter train
+        h3 gallery
+    div.ad
+      h1 Call for advertisement
+    div#holidays-container
+      div
+        img(src="images/exterior.jpg", alt="maharaja express image")
+        h2 Maharaja's Express
+        p Redefining Royalty, Luxury and Comfort, Maharajas’ express takes you on a sojourn to the era of bygone stately splendour of princely states. Sylvan furnishings, elegant ambience and modern amenities are amalgamated for an “Experience Unsurpassed”. It has been a winner of “World’s Leading Luxury train” by World Travel Awards consecutively for last six years.
+      div
+        img(src="images/Thailand.jpg", alt="Thailand image")
+        h2 International Packages
+        p Best deals in International Holiday packages, handpicked by IRCTC, for Thailand, Dubai, Sri Lanka, Hong Kong, China, Macau, Bhutan, Nepal, U.K., Europe, USA, Australia etc. The packages are inclusive of sightseeing, meals, visa charges and overseas medical insurance to give you a hassle-free and memorable experience.
+      div
+        img(src="images/Manali.jpg", alt="Manali image")
+        h2 Domestic Air Packages
+        p Be it the spiritual devotee seeking blessings of Tirupati, Shirdi or Mata Vaishno Devi or the leisure traveller wanting to relish the Blue mountains of North East, Sand-dunes of Rajasthan, Hamlets of Ladakh, Wonders of Himalayas, Serene lakes or Picturesque Islands, IRCTC has it all. Discover India through IRCTC!
+      div
+        img(src="images/Buddha.png", alt="Buddha image")
+        h2 Buddhist Circuit Tourist Train
+        p India, the country where Buddhism originated has rich memories of the Buddhist legacy. As part of its drive towards austerity, the only kind of art & architecture that it supported were Stupas, Chaityas & Viharas. Buddhist Train India will help you visit all these places up close for a truly religious experience.
+      div
+        img(src="images/Kashmir.jpg", alt="Kashmir valley image")
+        h2 Rail Tour Packages
+        p IRCTC offers Exclusive Rail tour packages with confirmed train tickets, sight-seeing and meals for enchanting Nilgiri Mountains, Darjeeling, Kullu Manali, Kashmir, Gangtok or divine tours of Mata Vaishno Devi, Rameswaram, Madurai, Shirdi, Tirupati etc. Holiday packages/ Land packages to these destinations are also available.
+      div
+        img#bottlead(src="images/imgad.jpeg", alt="advertisement image")
+    div#contact
+      img(src="", alt="")
+      a(href="") Facebook &emsp; &emsp;
+      img(src="", alt="")
+      a(href="") Twitter
+    div#footer
+      p Copyright © 2020 - www.irctc.co.in. All Rights Reserved
+      p Designed and Hosted by CRIS
+  script(src="/javascripts/user_auth.js")

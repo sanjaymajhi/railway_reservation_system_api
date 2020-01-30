@@ -1,10 +1,12 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
+var moment = require("moment");
+
 var user = new Schema({
   f_name: { type: String, min: 5, max: 20, required: true },
   l_name: { type: String, min: 5, max: 20, required: true },
-  dob: { type: Date, required: true, max: Date("2002/12/31") },
+  dob: { type: Date, required: true },
   username: { type: String, min: 5, max: 10, required: true },
   password: { type: String, min: 8, max: 15, required: true },
   email: { type: String, required: true },
@@ -12,6 +14,9 @@ var user = new Schema({
   gender: { type: String, enum: ["M", "F", "O"], required: true },
   trains_booked: [{ type: Schema.Types.ObjectId, ref: "Train" }],
   admin: { type: Boolean, required: true }
+});
+user.virtual("DOB").get(function() {
+  return moment(this.dob).format("YYYY-MM-DD");
 });
 
 module.exports = mongoose.model("User_railway", user);
