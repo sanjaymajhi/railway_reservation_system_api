@@ -16,6 +16,6 @@ Router.post("/login/", userController.user_login_post);
 Router.post("/profile", auth, userController.profile);
 Router.get("/profile", auth, userController.profile);
 
-Router.post("/update/", userController.user_update_post);
+Router.post("/update/", auth, userController.user_update_post);
 
 module.exports = Router;

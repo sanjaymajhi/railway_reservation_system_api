@@ -16,11 +16,7 @@ var Request = require("request");
 exports.profile = (req, res) => {
   User.findById(req.user_detail.id).exec((err, details) => {
     if (details) {
-      res.render("profile", {
-        title: "Profile Page",
-        user: details,
-        profile: 1
-      });
+      res.status(200).json(details);
     } else {
       res.send("no token");
     }
@@ -183,22 +179,35 @@ exports.user_update_post = [
         title: "Profile Page",
         errors: errors.array()
       });
-
       return;
     }
-
-    User.findOne({ email: req.body.email }, "email").exec(
+    User.findOne({ _id: req.user_detail.id }, "_id email password").exec(
       async (err, result) => {
         if (err) {
-          return next(err);
+          throw err;
         }
-        if (result.email != req.body.email) {
-          res.render("profile", { title: "Profile Page", user_error: 1 });
+        const isMatch = await bcrypt.compare(
+          req.body.password,
+          result.password
+        );
+        if (!isMatch) {
+          console.log("password not matched");
           return;
         } else {
+          User.findOne({ email: req.body.email }, "_id").exec(
+            (err, founded_user) => {
+              if (err) {
+                throw err;
+              }
+              if (founded_user._id != req.user_detail.id) {
+                console.log(founded_user._id, req.user_detail.id);
+                const error = new Error("email already exists");
+                throw error;
+              }
+            }
+          );
           var salt = await bcrypt.genSalt(10);
           var password = await bcrypt.hash(req.body.password, salt);
-
           var user = new User({
             f_name: req.body.f_name,
             l_name: req.body.l_name,
@@ -208,38 +217,12 @@ exports.user_update_post = [
             password: password,
             gender: req.body.gender,
             email: req.body.email,
-            _id: result._id
+            _id: req.user_detail.id
           });
-
           await User.findByIdAndUpdate(user._id, user, err => {
             if (err) {
-              return next(err);
+              throw err;
             }
-            var transporter = nodemailer.createTransport({
-              service: "gmail",
-              auth: {
-                user: "web.developer.sanjay.majhi@gmail.com",
-                pass: "Qwerty12345*"
-              }
-            });
-
-            var mailoption = {
-              from: "web.developer.sanjay.majhi@gmail.com",
-              to: user.email,
-              subject: "Profile Updated",
-              text:
-                "Hey " +
-                user.f_name +
-                " , your profile has been successfully updated. \nThanks from Sanjay Majhi"
-            };
-
-            transporter.sendMail(mailoption, (err, info) => {
-              if (err) {
-                console.log(err);
-              } else {
-                console.log("Email sent : " + info.response);
-              }
-            });
             res.json({ updated: "success" });
           });
         }
