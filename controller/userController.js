@@ -38,7 +38,7 @@ exports.user_register_post = [
   validator
     .body("username", "Invalid Username")
     .trim()
-    .isLength({ min: 5, max: 10 })
+    .isLength({ min: 5, max: 20 })
     .isAlphanumeric()
     .withMessage("Only Alpha numeric charcaters allowed"),
   validator
@@ -79,7 +79,6 @@ exports.user_register_post = [
         return next(err);
       }
       if (email.length) {
-        console.log(email);
         res.render("register", { title: "Registration Page", user_error: 1 });
         return;
       } else {
@@ -103,32 +102,8 @@ exports.user_register_post = [
           if (err) {
             return next(err);
           }
-          var transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-              user: "web.developer.sanjay.majhi@gmail.com",
-              pass: "Qwerty12345*"
-            }
-          });
 
-          var mailoption = {
-            from: "web.developer.sanjay.majhi@gmail.com",
-            to: user.email,
-            subject: "Singup successful",
-            text:
-              "Welcome " +
-              user.f_name +
-              " , to Indian railways ticket booking website. \nHere, you can book tickets and check pnr. \nThanks from Sanjay Majhi"
-          };
-
-          transporter.sendMail(mailoption, (err, info) => {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log("Email sent : " + info.response);
-            }
-          });
-          res.render("login", { title: "Login Page" });
+          res.status(200).json({ registration: "success" });
         });
       }
     });
