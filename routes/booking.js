@@ -43,8 +43,6 @@ Router.post("/route/:id/delete", routeController.route_delete_post);
 Router.get("/station/create", stationController.station_create_get);
 Router.post("/station/create", stationController.station_create_post);
 
-Router.get("/stations", stationController.station_list);
-
 Router.get("/station/:id/update", stationController.station_update_get);
 Router.post("/station/:id/update", stationController.station_update_post);
 
