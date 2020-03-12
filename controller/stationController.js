@@ -7,9 +7,19 @@ var Station = require("../models/station");
 exports.station_create_get = (req, res) => {
   res.send("ok");
 };
+
+exports.station_list = (req, res) => {
+  Station.find({}, "name code").exec((err, stations) => {
+    if (err) {
+      throw err;
+    }
+    res.json({ list: stations });
+  });
+};
+
 exports.station_create_post = [
   validator
-    .body("name", "Name cannot be empty or very large")
+    .body("name", "Name min 5 character and max 30 character")
     .trim()
     .isLength({ min: 5, max: 30 }),
   validator

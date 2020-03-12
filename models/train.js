@@ -3,13 +3,12 @@ var Schema = mongoose.Schema;
 
 var train = new Schema({
   name: { type: String, min: 4, max: 20, required: true },
-  train_no: { type: Number, min: 5, max: 6, required: true },
-  avialable_tiers: [
+  train_no: { type: Number, required: true },
+  available_tiers: [
     {
       type: String,
       enum: ["1A", "2A", "3A", "SL", "CC"],
-      required: true,
-      default: "SL"
+      required: true
     }
   ],
   departing_days: [
@@ -22,9 +21,9 @@ var train = new Schema({
   route: { type: Schema.Types.ObjectId, ref: "Route" },
   depart_time: { type: Date, default: Date.now },
   arrival_time: { type: Date, default: Date.now },
-  coach_seats: { type: Number, min: 0, max: 200, required: true },
-  total_coaches: { type: Number, min: 1, max: 40, required: true },
-  available_seats: { type: Number, min: 0, max: 1000 },
+  coach_seats: { type: Number, required: true },
+  total_coaches: { type: Number, required: true },
+  available_seats: { type: Number, required: true },
   status: { type: String, enum: ["AVL", "RAC", "WL", "CAN"], default: "AVL" },
   ticket_cost: { type: Number, required: true }
 });

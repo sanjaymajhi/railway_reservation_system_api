@@ -8,8 +8,6 @@ var routeController = require("../controller/routeController");
 var otherController = require("../controller/otherController");
 
 //train routes
-
-Router.get("/train/create", trainController.train_create_get);
 Router.post("/train/create", trainController.train_create_post);
 
 Router.get("/train/:id", trainController.train_detail);
@@ -26,7 +24,6 @@ Router.post("/train/:id/book", trainController.train_book_post);
 
 //route routes
 
-Router.get("/route/create", routeController.route_create_get);
 Router.post("/route/create", routeController.route_create_post);
 
 Router.get("/routes", routeController.route_list);
@@ -42,6 +39,8 @@ Router.post("/route/:id/delete", routeController.route_delete_post);
 
 Router.get("/station/create", stationController.station_create_get);
 Router.post("/station/create", stationController.station_create_post);
+
+Router.get("/stations", stationController.station_list);
 
 Router.get("/station/:id/update", stationController.station_update_get);
 Router.post("/station/:id/update", stationController.station_update_post);
