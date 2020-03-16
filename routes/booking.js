@@ -7,11 +7,13 @@ var ticketController = require("../controller/ticketController");
 var routeController = require("../controller/routeController");
 var otherController = require("../controller/otherController");
 
+const auth = require("../auth");
+
 //train routes
-Router.post("/train/create", trainController.train_create_post);
+Router.post("/train/create", auth, trainController.train_create_post);
 
 Router.get("/train/:id", trainController.train_detail);
-Router.get("/trains", trainController.train_list);
+Router.post("/trains", trainController.train_list);
 
 Router.get("/train/:id/update", trainController.train_update_get);
 Router.post("/train/:id/update", trainController.train_update_post);
@@ -24,7 +26,7 @@ Router.post("/train/:id/book", trainController.train_book_post);
 
 //route routes
 
-Router.post("/route/create", routeController.route_create_post);
+Router.post("/route/create", auth, routeController.route_create_post);
 
 Router.get("/routes", routeController.route_list);
 Router.get("/route/:id", routeController.route_detail);
@@ -37,8 +39,7 @@ Router.post("/route/:id/delete", routeController.route_delete_post);
 
 //station routes
 
-Router.get("/station/create", stationController.station_create_get);
-Router.post("/station/create", stationController.station_create_post);
+Router.post("/station/create", auth, stationController.station_create_post);
 
 Router.get("/stations", stationController.station_list);
 

@@ -24,38 +24,48 @@ exports.route_create_post = [
     .isNumeric(),
   validator.sanitizeBody("distance").escape(),
   (req, res, next) => {
-    console.log("reached");
-    const errors = validator.validationResult(req);
-    if (!errors.isEmpty()) {
-      res.json({ saved: "unsuccessful", error: errors.array() });
+    if (req.user_detail.admin) {
+      const errors = validator.validationResult(req);
+      if (!errors.isEmpty()) {
+        res.json({ saved: "unsuccessful", error: errors.array() });
+        return;
+      }
+      Route.findOne({ route_code: req.body.route_code }).exec(
+        async (err, result) => {
+          if (err) {
+            throw new Error("route search error");
+          }
+          if (result) {
+            res.json({
+              saved: "unsuccessful",
+              error: "route already exists..."
+            });
+            return;
+          } else {
+            console.log(req.body);
+            var route = new Route({
+              src_stn: req.body.src_stn,
+              des_stn: req.body.des_stn,
+              stations: req.body.stations,
+              distance: req.body.distance,
+              route_code: req.body.route_code
+            });
+            await route.save(err => {
+              if (err) {
+                throw new Error("unable to save to database...");
+              }
+              res.status(200).json({ saved: "success" });
+            });
+          }
+        }
+      );
+    } else {
+      res.json({
+        saved: "unsuccessful",
+        error: { msg: "You are not an admin" }
+      });
       return;
     }
-    Route.findOne({ route_code: req.body.route_code }).exec(
-      async (err, result) => {
-        if (err) {
-          throw new Error("route search error");
-        }
-        if (result) {
-          res.json({ saved: "unsuccessful", error: "route already exists..." });
-          return;
-        } else {
-          console.log(req.body);
-          var route = new Route({
-            src_stn: req.body.src_stn,
-            des_stn: req.body.des_stn,
-            stations: req.body.stations,
-            distance: req.body.distance,
-            route_code: req.body.route_code
-          });
-          await route.save(err => {
-            if (err) {
-              throw new Error("unable to save to database...");
-            }
-            res.status(200).json({ saved: "success" });
-          });
-        }
-      }
-    );
   }
 ];
 

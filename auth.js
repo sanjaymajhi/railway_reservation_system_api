@@ -3,7 +3,11 @@ var jwt = require("jsonwebtoken");
 module.exports = (req, res, next) => {
   const token = req.body.token;
   if (!token) {
-    return res.status(401).redirect("/user/login/");
+    res.json({
+      saved: "unsuccessful",
+      error: { msg: "You are not logged in..." }
+    });
+    return;
   }
   try {
     const decoded = jwt.verify(token, "sanjay");

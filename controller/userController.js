@@ -241,13 +241,16 @@ exports.user_login_post = [
       if (body.success !== undefined && !body.success) {
         return res.send({ message: "Captcha validation failed" });
       }
-      User.findOne({ email: req.body.email }, "email password").exec(
+      User.findOne({ email: req.body.email }, "email password admin").exec(
         async (err, result) => {
           if (err) {
             return next(err);
           }
-          if (!result.email) {
-            res.render("login", { title: "Login Page", user_error: 1 });
+          if (!result) {
+            res.json({
+              saved: "unsuccessful",
+              error: { msg: "Email does not exists" }
+            });
             return;
           } else {
             const isMatch = await bcrypt.compare(
@@ -255,12 +258,16 @@ exports.user_login_post = [
               result.password
             );
             if (!isMatch) {
-              res.render("login", { title: "Login Page", user_error: 1 });
+              res.json({
+                saved: "unsuccessful",
+                error: { msg: "Incorrect password" }
+              });
               return;
             } else {
               var payload = {
                 user: {
-                  id: result._id
+                  id: result._id,
+                  admin: result.admin
                 }
               };
               await jwt.sign(
@@ -271,7 +278,9 @@ exports.user_login_post = [
                   if (err) {
                     return next(err);
                   }
-                  res.status(200).json(token);
+                  res
+                    .status(200)
+                    .json({ saved: "success", token, admin: result.admin });
                 }
               );
             }
