@@ -23,8 +23,8 @@ var train = new Schema({
   arrival_time: { type: Date, default: Date.now },
   coach_seats: { type: Number, required: true },
   total_coaches: { type: Number, required: true },
-  available_seats: { type: Number, required: true },
-  status: { type: String, enum: ["AVL", "RAC", "WL", "CAN"], default: "AVL" },
+  available_seats: [{ type: Number, required: true }],
+  status: [{ type: String, enum: ["AVL", "RAC", "WL", "CAN"] }],
   ticket_cost: { type: Number, required: true }
 });
 

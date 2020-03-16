@@ -80,17 +80,17 @@ exports.train_create_post = [
     .trim()
     .isLength({ min: 4, max: 20 }),
   validator.body("depart_time").trim(),
-  validator.body("arrival_time"),
+  validator.body("journey_time_hh").trim(),
+  validator.body("journey_time_mm").trim(),
   validator.body("train_no").isNumeric(),
-  validator.body("total_seats").isNumeric(),
   validator.body("coach_seats").isNumeric(),
   validator.body("ticket_cost").isNumeric(),
 
   validator.sanitizeBody("name").escape(),
   validator.sanitizeBody("depart_time").escape(),
-  validator.sanitizeBody("arrival_time").escape(),
+  validator.body("journey_time_hh").escape(),
+  validator.body("journey_time_mm").escape(),
   validator.sanitizeBody("train_no").escape(),
-  validator.sanitizeBody("total_seats").escape(),
   validator.sanitizeBody("coach_seats").escape(),
   validator.sanitizeBody("ticket_cost").escape(),
 
@@ -112,6 +112,24 @@ exports.train_create_post = [
           });
           return;
         } else {
+          //making an array to save trains booked upto 90 days
+          const count = req.body.departing_days.length * 12;
+          const available_seats = [];
+          const status = [];
+          for (let i = 1; i <= count; i++) {
+            available_seats.push(req.body.coach_seats * req.body.total_coaches);
+            status.push("AVL");
+          }
+
+          //finding arrival time from duration given by user
+          const depart_time = new Date("2000-01-01 " + req.body.depart_time);
+          const duration = moment.duration({
+            hours: req.body.journey_time_hh,
+            minutes: req.body.journey_time_mm
+          });
+          const arrival_time = moment(depart_time).add(duration);
+
+          //saving train details
           var train = new Train({
             name: req.body.name,
             train_no: req.body.train_no,
@@ -119,16 +137,16 @@ exports.train_create_post = [
             departing_days: req.body.departing_days,
             route: req.body.route,
             depart_time: new Date("2000-01-01 " + req.body.depart_time),
-            arrival_time: new Date("2000-01-01 " + req.body.arrival_time),
+            arrival_time: arrival_time,
             coach_seats: req.body.coach_seats,
-            total_seats: req.body.total_seats,
+            total_coaches: req.body.total_coaches,
             ticket_cost: req.body.ticket_cost,
-            available_seats: req.body.available_seats,
-            total_coaches: req.body.total_coaches
+            available_seats: available_seats,
+            status: status
           });
           train.save(err => {
             if (err) {
-              throw new Error("save to database error");
+              throw err;
             }
             res.json({ saved: "success" });
           });
