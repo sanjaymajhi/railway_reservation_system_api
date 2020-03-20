@@ -21,8 +21,10 @@ Router.post("/train/:id/update", trainController.train_update_post);
 Router.get("/train/:id/delete", trainController.train_delete_get);
 Router.post("/train/:id/delete", trainController.train_delete_post);
 
-Router.get("/train/:id/book", trainController.train_book_get);
-Router.post("/train/:id/book", trainController.train_book_post);
+Router.get("/train/book", trainController.train_book_get);
+Router.post("/train/book", trainController.train_book_post);
+
+Router.post("/train/status", trainController.train_availability);
 
 //route routes
 
@@ -51,7 +53,7 @@ Router.post("/station/:id/delete", stationController.station_delete_post);
 
 //ticket routes
 
-Router.get("/ticket/:id", ticketController.ticket_detail);
+Router.post("/ticket/", ticketController.create_ticket);
 
 Router.get("/ticket/:id/cancel", ticketController.ticket_cancel_get);
 Router.post("/ticket/:id/cancel", ticketController.ticket_cancel_post);

@@ -12,7 +12,7 @@ var user = new Schema({
   email: { type: String, required: true },
   mobile: { type: Number, required: true },
   gender: { type: String, enum: ["M", "F", "O"], required: true },
-  trains_booked: [{ type: Schema.Types.ObjectId, ref: "Train" }],
+  trains_booked: [{ type: Schema.Types.ObjectId, ref: "Ticket" }],
   admin: { type: Boolean, required: true }
 });
 user.virtual("DOB").get(function() {

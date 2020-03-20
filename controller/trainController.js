@@ -74,6 +74,30 @@ exports.train_detail = (req, res) => {
   res.send("ok");
 };
 
+exports.train_availability = (req, res) => {
+  Train.findOne(
+    { _id: req.body.id },
+    "availability coach_seats total_coaches"
+  ).exec((err, train) => {
+    if (err) {
+      throw err;
+    }
+    console.log(train.availability);
+    if (train.availability.length == 0) {
+      res.json({
+        seats: train.coach_seats * train.total_coaches,
+        status: "AVL"
+      });
+    } else {
+      train.availability.map(item => {
+        if (item.date === req.body.date) {
+          res.json({ seats: item.available_seats, status: item.status });
+        }
+      });
+    }
+  });
+};
+
 exports.train_create_post = [
   validator
     .body("name", "name can be min 4 and max 20 characters long ")
@@ -112,15 +136,6 @@ exports.train_create_post = [
           });
           return;
         } else {
-          //making an array to save trains booked upto 90 days
-          const count = req.body.departing_days.length * 12;
-          const available_seats = [];
-          const status = [];
-          for (let i = 1; i <= count; i++) {
-            available_seats.push(req.body.coach_seats * req.body.total_coaches);
-            status.push("AVL");
-          }
-
           //finding arrival time from duration given by user
           const depart_time = new Date("2000-01-01 " + req.body.depart_time);
           const duration = moment.duration({
@@ -141,8 +156,7 @@ exports.train_create_post = [
             coach_seats: req.body.coach_seats,
             total_coaches: req.body.total_coaches,
             ticket_cost: req.body.ticket_cost,
-            available_seats: available_seats,
-            status: status
+            available_seats: []
           });
           train.save(err => {
             if (err) {

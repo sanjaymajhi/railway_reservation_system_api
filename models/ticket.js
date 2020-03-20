@@ -2,14 +2,27 @@ var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
 
+var passenger = new Schema({
+  id: { type: String, required: true },
+  name: { type: String, required: true },
+  age: { type: Number, required: true },
+  gender: { type: String, required: true },
+  food: { type: String, required: true }
+});
+
 var ticket = new Schema({
-  pnr: { type: Number, required: true },
-  booked_by: { type: Schema.Types.ObjectId, required: true },
+  train_name: { type: String, required: true },
+  train_no: { type: Number, required: true },
+  teir: { type: String, required: true },
+  count: { type: Number, required: true },
+  src_stn: { type: Schema.Types.ObjectId, ref: "Station" },
+  des_stn: { type: Schema.Types.ObjectId, ref: "Station" },
   depart_date: { type: Date, required: true },
   arrival_date: { type: Date, required: true },
-  passenger_count: { type: Number, min: 1, max: 5, required: true },
-  price: { type: Number, required: true },
-  food: { type: String, enum: ["VEG", "NON-VEG"], required: true },
-  bedroll: { type: Boolean, required: true },
-  passengers: [{ type: String, min: 5, max: 30, required: true }]
+  passengers: [passenger],
+  cost: { type: Number, required: true },
+  user: { type: Schema.Types.ObjectId, ref: "User_railway" },
+  paymentId: { type: String, required: true }
 });
+
+module.exports = mongoose.model("Ticket", ticket);

@@ -1,6 +1,12 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
+var availability = new Schema({
+  date: { type: String, required: true },
+  available_seats: { type: Number, required: true },
+  status: { type: String, enum: ["AVL", "NAVL"], required: true }
+});
+
 var train = new Schema({
   name: { type: String, min: 4, max: 20, required: true },
   train_no: { type: Number, required: true },
@@ -23,8 +29,7 @@ var train = new Schema({
   arrival_time: { type: Date, default: Date.now },
   coach_seats: { type: Number, required: true },
   total_coaches: { type: Number, required: true },
-  available_seats: [{ type: Number, required: true }],
-  status: [{ type: String, enum: ["AVL", "RAC", "WL", "CAN"] }],
+  availability: [availability],
   ticket_cost: { type: Number, required: true }
 });
 
