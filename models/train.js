@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var availability = new Schema({
-  date: { type: String, required: true },
+  date: { type: Date, required: true },
   available_seats: { type: Number, required: true },
   status: { type: String, enum: ["AVL", "NAVL"], required: true }
 });

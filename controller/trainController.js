@@ -26,6 +26,13 @@ exports.train_list = [
       .populate("src_stn")
       .populate("des_stn")
       .exec((err, result) => {
+        if (result === null) {
+          res.json({
+            found: "unsuccessfull",
+            error: { msg: "Route not serviceable" }
+          });
+          return;
+        }
         const date = new Date(req.body.date);
         const day = date
           .toLocaleDateString("en-US", { weekday: "short" })
@@ -82,18 +89,27 @@ exports.train_availability = (req, res) => {
     if (err) {
       throw err;
     }
-    console.log(train.availability);
     if (train.availability.length == 0) {
       res.json({
         seats: train.coach_seats * train.total_coaches,
         status: "AVL"
       });
     } else {
+      var flag = 0;
       train.availability.map(item => {
-        if (item.date === req.body.date) {
+        if (
+          new Date(item.date).getTime() === new Date(req.body.date).getTime()
+        ) {
+          flag = 1;
           res.json({ seats: item.available_seats, status: item.status });
         }
       });
+      if (flag == 0) {
+        res.json({
+          seats: train.coach_seats * train.total_coaches,
+          status: "AVL"
+        });
+      }
     }
   });
 };

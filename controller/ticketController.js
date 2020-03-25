@@ -60,18 +60,35 @@ exports.create_ticket = (req, res) => {
             if (err) {
               throw err;
             }
-            console.log("saved");
           }
         );
 
-        var availability = {
-          date: req.body.depart_date,
-          available_seats: req.body.available_seats,
-          status: req.body.status
-        };
-        let train_availability = result.train_detail.availability.push(
-          availability
-        );
+        if (req.body.available_seats - req.body.count > 0) {
+          var status = "AVL";
+        } else {
+          var status = "NAVL";
+        }
+        var flag = 0;
+        for (var item in result.train_detail.availability) {
+          if (
+            new Date(result.train_detail.availability[item].date).getTime() ===
+            new Date(req.body.depart_date).getTime()
+          ) {
+            result.train_detail.availability[item].available_seats =
+              req.body.available_seats - req.body.count;
+            result.train_detail.availability[item].status = status;
+            flag = 1;
+            break;
+          }
+        }
+
+        if (flag == 0) {
+          result.train_detail.availability.push({
+            date: req.body.depart_date,
+            available_seats: req.body.available_seats - req.body.count,
+            status: status
+          });
+        }
 
         var train = new Train({
           name: result.train_detail.name,
@@ -83,11 +100,10 @@ exports.create_ticket = (req, res) => {
           arrival_time: result.train_detail.arrival_time,
           coach_seats: result.train_detail.coach_seats,
           total_coaches: result.train_detail.total_coaches,
-          availability: train_availability,
+          availability: result.train_detail.availability,
           ticket_cost: result.train_detail.ticket_cost,
           _id: result.train_detail._id
         });
-
         await Train.findByIdAndUpdate(
           train._id,
           train,
@@ -96,7 +112,7 @@ exports.create_ticket = (req, res) => {
             if (err) {
               throw err;
             }
-            console.log("saved");
+            res.json({ status: "saved" });
           }
         );
       });
