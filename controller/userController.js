@@ -14,6 +14,15 @@ var BodyParser = require("body-parser");
 var Request = require("request");
 
 exports.profile = (req, res) => {
+  fetch("https://api.razorpay.com/v1/payments/pay_EYqhEcfKltc6HF", {
+    method: "get",
+    headers: {
+      authorization:
+        "Basic cnpwX3Rlc3Rfa0hiVWVmN1diTVJJQ3M6dUF1UHRRRExBbXN3aEZHb0NDYklCdWZz"
+    }
+  })
+    .then(res => res.headers().json())
+    .then(data => console.log(data));
   User.findById(req.user_detail.id).exec((err, details) => {
     if (details) {
       res.status(200).json(details);
