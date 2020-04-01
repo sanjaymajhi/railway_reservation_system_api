@@ -224,7 +224,7 @@ exports.user_login_post = [
       res.render("login", { title: "Login Page", errors: errors.array() });
       return;
     }
-    const RECAPTCHA_SECRET = "6Lf64eUUAAAAAO_u2TTDvaqCx39lqSrB7p98nNsJ";
+    const RECAPTCHA_SECRET = "6LdD4-UUAAAAAAUvQUO6L13GK3wZ9v0CvIe244D3";
     var recaptcha_url = "https://www.google.com/recaptcha/api/siteverify?";
     recaptcha_url += "secret=" + RECAPTCHA_SECRET + "&";
     recaptcha_url += "response=" + req.body["g-recaptcha-response"] + "&";
