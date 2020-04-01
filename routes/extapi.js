@@ -5,3 +5,5 @@ var extapiController = require("../controller/extapiController");
 
 Router.get("/payments/:id", extapiController.paymentFetch);
 Router.get("/payments/:id/refunds", extapiController.refundFetch);
+
+module.exports = Router;
