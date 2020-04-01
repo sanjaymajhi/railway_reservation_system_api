@@ -44,14 +44,6 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-var cors = require("cors");
-const corsOptions = {
-  origin: "https://api.razorpay.com/v1/payments/:id",
-  optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions));
-app.options("*", cors());
-
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
