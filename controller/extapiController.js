@@ -9,7 +9,7 @@ exports.paymentFetch = (req, res) => {
     },
     json: true
   };
-  Request(options).then(data => res.json(...data));
+  Request(options).then(data => res.json({ ...data }));
 };
 
 exports.refundFetch = (req, res) => {
@@ -21,5 +21,5 @@ exports.refundFetch = (req, res) => {
     },
     json: true
   };
-  Request(options).then(data => res.json(...data));
+  Request(options).then(data => res.json({ ...data }));
 };
