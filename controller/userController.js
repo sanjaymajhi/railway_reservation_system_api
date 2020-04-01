@@ -11,10 +11,10 @@ var nodemailer = require("nodemailer");
 
 var BodyParser = require("body-parser");
 //for recaptcha
-var Request = require("request");
+var Request = require("request-promise");
 
 exports.profile = (req, res) => {
-  fetch("https://api.razorpay.com/v1/payments/pay_EYqhEcfKltc6HF", {
+  Request("https://api.razorpay.com/v1/payments/pay_EYqhEcfKltc6HF", {
     method: "get",
     headers: {
       authorization:
