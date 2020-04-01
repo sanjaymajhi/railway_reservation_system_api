@@ -23,9 +23,6 @@ exports.profile = (req, res) => {
   });
 };
 
-exports.user_register_get = (req, res) => {
-  res.render("register", { title: "Registration Page" });
-};
 exports.user_register_post = [
   validator
     .body("f_name", "Invalid First Name")
@@ -206,10 +203,6 @@ exports.user_update_post = [
   }
 ];
 
-exports.user_login_get = (req, res) => {
-  res.render("login", { title: "Login Page" });
-};
-
 exports.user_login_post = [
   validator
     .body("email", "Invalid Username or Password")
@@ -290,3 +283,89 @@ exports.user_login_post = [
     });
   }
 ];
+
+exports.change_pass = [
+  validator
+    .body("c_pass", "old password cannot be empty")
+    .isLength({ min: 1 })
+    .trim(),
+  validator
+    .body("n_pass", "new password length min 8 and max 15")
+    .isLength({ min: 8, max: 15 })
+    .trim(),
+
+  validator.sanitizeBody("c_pass").escape(),
+  validator.sanitizeBody("n_pass").escape(),
+  (req, res) => {
+    const errors = validator.validationResult(req);
+    if (!errors.isEmpty()) {
+      res.json({ saved: "unsuccessful", error: errors.array() });
+      return;
+    }
+    User.findOne({ _id: req.user_detail.id }).exec(async (err, result) => {
+      if (err) {
+        throw err;
+      }
+      if (result == null) {
+        res.json({
+          saved: "unsuccessful",
+          error: { msg: "user does not exist" }
+        });
+        return;
+      } else {
+        const isMatch = await bcrypt.compare(req.body.c_pass, result.password);
+        if (!isMatch) {
+          res.json({
+            saved: "unsuccessful",
+            error: { msg: "Incorrect password" }
+          });
+          return;
+        } else {
+          var salt = await bcrypt.genSalt(10);
+          var password = await bcrypt.hash(req.body.n_pass, salt);
+          var user = new User({
+            f_name: req.body.f_name,
+            l_name: req.body.l_name,
+            dob: req.body.dob,
+            mobile: req.body.mobile,
+            username: req.body.username,
+            password: password,
+            gender: req.body.gender,
+            email: req.body.email,
+            _id: req.user_detail.id
+          });
+          await User.findByIdAndUpdate(user._id, user, err => {
+            if (err) {
+              throw err;
+            }
+            res.json({ saved: "success" });
+          });
+        }
+      }
+    });
+  }
+];
+
+exports.tickets = (req, res) => {
+  User.findOne({ _id: req.user_detail.id })
+    .populate("trains_booked")
+    .exec((err, result) => {
+      if (err) {
+        throw err;
+      }
+
+      res.json({ tickets: result.trains_booked });
+    });
+};
+
+exports.paymentIds = (req, res) => {
+  User.findOne({ _id: req.user_detail.id }, "trains_booked")
+    .populate("trains_booked")
+    .exec((err, result) => {
+      if (err) {
+        throw err;
+      }
+      let paymentIds = result.trains_booked.map(ticket => ticket.paymentId);
+      res.json({ paymentIds: paymentIds });
+    });
+};

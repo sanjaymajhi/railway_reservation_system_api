@@ -55,8 +55,8 @@ Router.post("/station/:id/delete", stationController.station_delete_post);
 
 Router.post("/ticket/", ticketController.create_ticket);
 
-Router.get("/ticket/:id/cancel", ticketController.ticket_cancel_get);
-Router.post("/ticket/:id/cancel", ticketController.ticket_cancel_post);
+Router.post("/ticket/search/", ticketController.ticket_search);
+Router.post("/ticket/cancel", ticketController.ticket_cancel);
 
 //other routes
 

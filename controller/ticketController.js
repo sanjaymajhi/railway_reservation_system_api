@@ -1,5 +1,6 @@
 var async = require("async");
 var mongoose = require("mongoose");
+var validator = require("express-validator");
 
 const User = require("../models/user");
 const Ticket = require("../models/ticket");
@@ -30,7 +31,8 @@ exports.create_ticket = (req, res) => {
         passengers: req.body.passengers,
         cost: req.body.cost,
         user: req.body.user,
-        paymentId: req.body.paymentId
+        paymentId: req.body.paymentId,
+        bookedOn: new Date()
       });
 
       ticket.save(async err => {
@@ -112,7 +114,7 @@ exports.create_ticket = (req, res) => {
             if (err) {
               throw err;
             }
-            res.json({ status: "saved" });
+            res.json({ status: "saved", id: ticket._id });
           }
         );
       });
@@ -120,9 +122,109 @@ exports.create_ticket = (req, res) => {
   );
 };
 
-exports.ticket_cancel_get = (req, res) => {
-  res.send("ok");
-};
-exports.ticket_cancel_post = (req, res) => {
-  res.send("ok");
+exports.ticket_search = [
+  validator
+    .body("pnr", "PNR no. is 24 characters long.")
+    .trim()
+    .isLength({ min: 20, max: 30 }),
+  validator.sanitizeBody("pnr").escape(),
+  (req, res) => {
+    const errors = validator.validationResult(req);
+    if (!errors.isEmpty()) {
+      res.json({ found: "unsuccessful", err: errors.array() });
+      return;
+    }
+    Ticket.findOne({ _id: req.body.pnr })
+      .populate("src_stn")
+      .populate("des_stn")
+      .populate("user")
+      .exec((err, result) => {
+        if (err) {
+          throw err;
+        }
+        if (result === null) {
+          res.json({
+            found: "unsuccessful",
+            err: "No ticket found with given pnr no."
+          });
+        } else {
+          res.json({ found: "success", data: result });
+        }
+      });
+  }
+];
+exports.ticket_cancel = (req, res) => {
+  Ticket.findOne({ _id: req.body.id }).exec((err, result) => {
+    if (err) {
+      throw err;
+    }
+    var ticket = new Ticket({
+      train_name: result.train_name,
+      train_no: result.train_no,
+      teir: result.teir,
+      count: result.count,
+      src_stn: result.src_stn,
+      des_stn: result.des_stn,
+      depart_date: result.depart_date,
+      arrival_date: result.arrival_date,
+      passengers: result.passengers,
+      cost: result.cost,
+      user: result.user,
+      paymentId: result.paymentId + "cancelled",
+      _id: req.body.id,
+      bookedOn: result.bookedOn
+    });
+    Ticket.findByIdAndUpdate(
+      req.body.id,
+      ticket,
+      { useFindAndModify: false },
+      err => {
+        if (err) {
+          throw err;
+        }
+      }
+    );
+
+    Train.findOne({ train_no: ticket.train_no }).exec((err, train_detail) => {
+      if (err) {
+        throw err;
+      }
+      for (var item in train_detail.availability) {
+        if (
+          new Date(train_detail.availability[item].date).getTime() ===
+          new Date(ticket.depart_date).getTime()
+        ) {
+          train_detail.availability[item].available_seats += ticket.count;
+          train_detail.availability[item].status = "AVL";
+          break;
+        }
+      }
+
+      var train = new Train({
+        name: train_detail.name,
+        train_no: train_detail.train_no,
+        available_tiers: train_detail.available_tiers,
+        departing_days: train_detail.departing_days,
+        route: train_detail.route,
+        depart_time: train_detail.depart_time,
+        arrival_time: train_detail.arrival_time,
+        coach_seats: train_detail.coach_seats,
+        total_coaches: train_detail.total_coaches,
+        availability: train_detail.availability,
+        ticket_cost: train_detail.ticket_cost,
+        _id: train_detail._id
+      });
+      Train.findByIdAndUpdate(
+        train._id,
+        train,
+        { useFindAndModify: false },
+        err => {
+          if (err) {
+            throw err;
+          }
+          res.json({ cancelled: "success" });
+        }
+      );
+    });
+  });
 };

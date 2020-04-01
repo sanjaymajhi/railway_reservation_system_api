@@ -20,9 +20,10 @@ var ticket = new Schema({
   depart_date: { type: Date, required: true },
   arrival_date: { type: Date, required: true },
   passengers: [passenger],
-  cost: { type: Number, required: true },
+  cost: { type: mongoose.Decimal128, required: true },
   user: { type: Schema.Types.ObjectId, ref: "User_railway" },
-  paymentId: { type: String, required: true }
+  paymentId: { type: String, required: true },
+  bookedOn: { type: Date, required: true }
 });
 
 module.exports = mongoose.model("Ticket", ticket);
