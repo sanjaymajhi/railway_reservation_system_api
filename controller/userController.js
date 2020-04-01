@@ -21,7 +21,7 @@ exports.profile = (req, res) => {
         "Basic cnpwX3Rlc3Rfa0hiVWVmN1diTVJJQ3M6dUF1UHRRRExBbXN3aEZHb0NDYklCdWZz"
     }
   })
-    .then(res => res.headers().json())
+    .then(res => res.json())
     .then(data => console.log(data));
   User.findById(req.user_detail.id).exec((err, details) => {
     if (details) {
