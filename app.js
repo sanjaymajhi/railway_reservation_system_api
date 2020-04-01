@@ -48,6 +48,12 @@ app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
+var compression = require("compression");
+app.use(compression());
+
+var helmet = require("helmet");
+app.use(helmet());
+
 var mongoose = require("mongoose");
 var dev_db_URl =
   "mongodb+srv://sanjay:1Sanjay@@cluster0-1naxh.mongodb.net/test?retryWrites=true&w=majority";
