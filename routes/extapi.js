@@ -4,6 +4,8 @@ var Router = express.Router();
 var extapiController = require("../controller/extapiController");
 
 Router.get("/payments/:id", extapiController.paymentFetch);
+
+Router.post("/payments/:id/refund", extapiController.paymentRefund);
 Router.get("/payments/:id/refunds", extapiController.refundFetch);
 
 Router.get("/invoices/", extapiController.ticketStatus);
