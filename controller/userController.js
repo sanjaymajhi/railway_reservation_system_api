@@ -324,15 +324,16 @@ exports.change_pass = [
           var salt = await bcrypt.genSalt(10);
           var password = await bcrypt.hash(req.body.n_pass, salt);
           var user = new User({
-            f_name: req.body.f_name,
-            l_name: req.body.l_name,
-            dob: req.body.dob,
-            mobile: req.body.mobile,
-            username: req.body.username,
+            f_name: result.f_name,
+            l_name: result.l_name,
+            dob: result.dob,
+            mobile: result.mobile,
+            username: result.username,
             password: password,
-            gender: req.body.gender,
-            email: req.body.email,
-            _id: req.user_detail.id
+            gender: result.gender,
+            email: result.email,
+            _id: req.user_detail.id,
+            trains_booked: result.trains_booked
           });
           await User.findByIdAndUpdate(user._id, user, err => {
             if (err) {
