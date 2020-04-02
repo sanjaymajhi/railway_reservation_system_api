@@ -25,15 +25,15 @@ exports.profile = (req, res) => {
 
 exports.user_register_post = [
   validator
-    .body("f_name", "Invalid First Name")
+    .body("f_name", "First Name should have min 5 and max 20 characters")
     .trim()
     .isLength({ min: 5, max: 20 }),
   validator
-    .body("l_name", "Invalid Last Name")
+    .body("l_name", "Last Name should have min 5 and max 20 characters")
     .trim()
     .isLength({ min: 5, max: 20 }),
   validator
-    .body("username", "Invalid Username")
+    .body("username", "Username should have min 5 and max 20 characters")
     .trim()
     .isLength({ min: 5, max: 20 })
     .isAlphanumeric()
@@ -60,23 +60,25 @@ exports.user_register_post = [
   validator.sanitizeBody("mobile").escape(),
   validator.sanitizeBody("username").escape(),
 
-  (req, res, next) => {
+  (req, res) => {
     const errors = validator.validationResult(req);
     if (!errors.isEmpty()) {
-      res.render("register", {
-        title: "Registration Page",
+      res.json({
+        saved: "unsuccessful",
         errors: errors.array()
       });
-
       return;
     }
 
     User.find({ email: req.body.email }, "email").exec(async (err, email) => {
       if (err) {
-        return next(err);
+        throw err;
       }
       if (email.length) {
-        res.render("register", { title: "Registration Page", user_error: 1 });
+        res.json({
+          saved: "unsuccessful",
+          error: { msg: "Email already exists" }
+        });
         return;
       } else {
         var salt = await bcrypt.genSalt(10);
@@ -97,10 +99,10 @@ exports.user_register_post = [
 
         await user.save(err => {
           if (err) {
-            return next(err);
+            throw err;
           }
 
-          res.status(200).json({ registration: "success" });
+          res.status(200).json({ saved: "success" });
         });
       }
     });
@@ -147,8 +149,8 @@ exports.user_update_post = [
   (req, res, next) => {
     const errors = validator.validationResult(req);
     if (!errors.isEmpty()) {
-      res.render("profile", {
-        title: "Profile Page",
+      res.json({
+        saved: "unsuccessful",
         errors: errors.array()
       });
       return;
@@ -163,7 +165,10 @@ exports.user_update_post = [
           result.password
         );
         if (!isMatch) {
-          console.log("password not matched");
+          res.json({
+            saved: "unsuccessful",
+            error: { msg: "password not matched" }
+          });
           return;
         } else {
           User.findOne({ email: req.body.email }, "_id").exec(
@@ -172,9 +177,11 @@ exports.user_update_post = [
                 throw err;
               }
               if (founded_user._id != req.user_detail.id) {
-                console.log(founded_user._id, req.user_detail.id);
-                const error = new Error("email already exists");
-                throw error;
+                res.json({
+                  saved: "unsuccessful",
+                  error: { msg: "email already exists" }
+                });
+                return;
               }
             }
           );
@@ -195,7 +202,7 @@ exports.user_update_post = [
             if (err) {
               throw err;
             }
-            res.json({ updated: "success" });
+            res.json({ saved: "success" });
           });
         }
       }
@@ -218,10 +225,13 @@ exports.user_login_post = [
 
   validator.sanitizeBody("*").escape(),
 
-  (req, res, next) => {
+  (req, res) => {
     const errors = validator.validationResult(req);
     if (!errors.isEmpty()) {
-      res.render("login", { title: "Login Page", errors: errors.array() });
+      res.json({
+        saved: "unsuccessful",
+        errors: errors.array()
+      });
       return;
     }
     const RECAPTCHA_SECRET = "6LdD4-UUAAAAAAUvQUO6L13GK3wZ9v0CvIe244D3";
@@ -237,7 +247,7 @@ exports.user_login_post = [
       User.findOne({ email: req.body.email }, "email password admin").exec(
         async (err, result) => {
           if (err) {
-            return next(err);
+            throw err;
           }
           if (!result) {
             res.json({
@@ -269,7 +279,7 @@ exports.user_login_post = [
                 { expiresIn: 10000 },
                 (err, token) => {
                   if (err) {
-                    return next(err);
+                    throw err;
                   }
                   res
                     .status(200)
