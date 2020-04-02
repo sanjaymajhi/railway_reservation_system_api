@@ -48,7 +48,9 @@ exports.ticketStatus = (req, res) => {
     },
     json: true
   };
-  Request(options).then(data => res.json({ ...data }));
+  Request(options)
+    .then(data => res.json({ ...data }))
+    .catch(data => res.json({ ...data }));
 };
 
 exports.ticket_book_get = (req, res) => {

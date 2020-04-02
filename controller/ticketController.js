@@ -145,7 +145,7 @@ exports.ticket_search = [
         if (result === null) {
           res.json({
             found: "unsuccessful",
-            err: "No ticket found with given pnr no."
+            error: { msg: "No ticket found with given pnr no." }
           });
         } else {
           res.json({ found: "success", data: result });

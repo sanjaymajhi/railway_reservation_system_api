@@ -25,19 +25,19 @@ exports.profile = (req, res) => {
 
 exports.user_register_post = [
   validator
-    .body("f_name", "First Name should have min 5 and max 20 characters")
+    .body("f_name", "First Name should have min 2 and max 20 characters")
     .trim()
-    .isLength({ min: 5, max: 20 }),
+    .isLength({ min: 2, max: 20 }),
   validator
-    .body("l_name", "Last Name should have min 5 and max 20 characters")
+    .body("l_name", "Last Name should have min 2 and max 20 characters")
     .trim()
-    .isLength({ min: 5, max: 20 }),
+    .isLength({ min: 2, max: 20 }),
   validator
     .body("username", "Username should have min 5 and max 20 characters")
     .trim()
     .isLength({ min: 5, max: 20 })
     .isAlphanumeric()
-    .withMessage("Only Alpha numeric charcaters allowed"),
+    .withMessage("Only Alpha numeric charcaters allowed in username"),
   validator
     .body("dob", "Invalid date")
     .trim()
@@ -111,19 +111,19 @@ exports.user_register_post = [
 
 exports.user_update_post = [
   validator
-    .body("f_name", "Invalid First Name")
+    .body("f_name", "First Name should be min 2 and max 20 characters long.")
     .trim()
-    .isLength({ min: 5, max: 20 }),
+    .isLength({ min: 2, max: 20 }),
   validator
-    .body("l_name", "Invalid Last Name")
+    .body("l_name", "Last Name should be min 2 and max 20 characters long.")
     .trim()
-    .isLength({ min: 5, max: 20 }),
+    .isLength({ min: 2, max: 20 }),
   validator
-    .body("username", "Invalid Username")
+    .body("username", "Username should be min 5 and max 20 characters long.")
     .trim()
-    .isLength({ min: 5, max: 10 })
+    .isLength({ min: 5, max: 20 })
     .isAlphanumeric()
-    .withMessage("Only Alpha numeric charcaters allowed"),
+    .withMessage("Only Alpha numeric charcaters allowed in username"),
   validator
     .body("dob", "Invalid date")
     .trim()
@@ -196,7 +196,8 @@ exports.user_update_post = [
             password: password,
             gender: req.body.gender,
             email: req.body.email,
-            _id: req.user_detail.id
+            _id: req.user_detail.id,
+            trains_booked: result.trains_booked
           });
           await User.findByIdAndUpdate(user._id, user, err => {
             if (err) {
@@ -234,7 +235,7 @@ exports.user_login_post = [
       });
       return;
     }
-    const RECAPTCHA_SECRET = "6LdD4-UUAAAAAAUvQUO6L13GK3wZ9v0CvIe244D3";
+    const RECAPTCHA_SECRET = "6LdMetIUAAAAALUeAujOsFtdp1qj14QVnMa8B5Tn";
     var recaptcha_url = "https://www.google.com/recaptcha/api/siteverify?";
     recaptcha_url += "secret=" + RECAPTCHA_SECRET + "&";
     recaptcha_url += "response=" + req.body["g-recaptcha-response"] + "&";
