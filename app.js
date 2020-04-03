@@ -50,6 +50,10 @@ app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
+app.get("*", (request, response) => {
+  response.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
 var compression = require("compression");
 app.use(compression());
 
