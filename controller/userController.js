@@ -38,18 +38,12 @@ exports.user_register_post = [
     .isLength({ min: 5, max: 20 })
     .isAlphanumeric()
     .withMessage("Only Alpha numeric charcaters allowed in username"),
-  validator
-    .body("dob", "Invalid date")
-    .trim()
-    .isISO8601(),
+  validator.body("dob", "Invalid date").trim().isISO8601(),
   validator
     .body("password", "password length min 8 and max 15")
     .trim()
     .isLength({ min: 8, max: 15 }),
-  validator
-    .body("email", "Invalid Email")
-    .trim()
-    .isEmail(),
+  validator.body("email", "Invalid Email").trim().isEmail(),
   validator
     .body("mobile", "Invalid Mobile")
     .trim()
@@ -65,7 +59,7 @@ exports.user_register_post = [
     if (!errors.isEmpty()) {
       res.json({
         saved: "unsuccessful",
-        errors: errors.array()
+        errors: errors.array(),
       });
       return;
     }
@@ -77,7 +71,7 @@ exports.user_register_post = [
       if (email.length) {
         res.json({
           saved: "unsuccessful",
-          error: { msg: "Email already exists" }
+          error: { msg: "Email already exists" },
         });
         return;
       } else {
@@ -94,10 +88,10 @@ exports.user_register_post = [
           gender: req.body.gender,
           email: req.body.email,
           trains_booked: [],
-          admin: false
+          admin: false,
         });
 
-        await user.save(err => {
+        await user.save((err) => {
           if (err) {
             throw err;
           }
@@ -106,7 +100,7 @@ exports.user_register_post = [
         });
       }
     });
-  }
+  },
 ];
 
 exports.user_update_post = [
@@ -124,18 +118,12 @@ exports.user_update_post = [
     .isLength({ min: 5, max: 20 })
     .isAlphanumeric()
     .withMessage("Only Alpha numeric charcaters allowed in username"),
-  validator
-    .body("dob", "Invalid date")
-    .trim()
-    .isISO8601(),
+  validator.body("dob", "Invalid date").trim().isISO8601(),
   validator
     .body("password", "password length min 8 and max 15")
     .trim()
     .isLength({ min: 8, max: 15 }),
-  validator
-    .body("email", "Invalid Email")
-    .trim()
-    .isEmail(),
+  validator.body("email", "Invalid Email").trim().isEmail(),
   validator
     .body("mobile", "Invalid Mobile")
     .trim()
@@ -151,7 +139,7 @@ exports.user_update_post = [
     if (!errors.isEmpty()) {
       res.json({
         saved: "unsuccessful",
-        errors: errors.array()
+        errors: errors.array(),
       });
       return;
     }
@@ -167,7 +155,7 @@ exports.user_update_post = [
         if (!isMatch) {
           res.json({
             saved: "unsuccessful",
-            error: { msg: "password not matched" }
+            error: { msg: "password not matched" },
           });
           return;
         } else {
@@ -179,7 +167,7 @@ exports.user_update_post = [
               if (founded_user._id != req.user_detail.id) {
                 res.json({
                   saved: "unsuccessful",
-                  error: { msg: "email already exists" }
+                  error: { msg: "email already exists" },
                 });
                 return;
               }
@@ -197,9 +185,9 @@ exports.user_update_post = [
             gender: req.body.gender,
             email: req.body.email,
             _id: req.user_detail.id,
-            trains_booked: result.trains_booked
+            trains_booked: result.trains_booked,
           });
-          await User.findByIdAndUpdate(user._id, user, err => {
+          await User.findByIdAndUpdate(user._id, user, (err) => {
             if (err) {
               throw err;
             }
@@ -208,7 +196,7 @@ exports.user_update_post = [
         }
       }
     );
-  }
+  },
 ];
 
 exports.user_login_post = [
@@ -231,11 +219,11 @@ exports.user_login_post = [
     if (!errors.isEmpty()) {
       res.json({
         saved: "unsuccessful",
-        errors: errors.array()
+        errors: errors.array(),
       });
       return;
     }
-    const RECAPTCHA_SECRET = "6LdD4-UUAAAAAAUvQUO6L13GK3wZ9v0CvIe244D3";
+    const RECAPTCHA_SECRET = "6LdMetIUAAAAALUeAujOsFtdp1qj14QVnMa8B5Tn";
     var recaptcha_url = "https://www.google.com/recaptcha/api/siteverify?";
     recaptcha_url += "secret=" + RECAPTCHA_SECRET + "&";
     recaptcha_url += "response=" + req.body["g-recaptcha-response"] + "&";
@@ -253,7 +241,7 @@ exports.user_login_post = [
           if (!result) {
             res.json({
               saved: "unsuccessful",
-              error: { msg: "Email does not exists" }
+              error: { msg: "Email does not exists" },
             });
             return;
           } else {
@@ -264,15 +252,15 @@ exports.user_login_post = [
             if (!isMatch) {
               res.json({
                 saved: "unsuccessful",
-                error: { msg: "Incorrect password" }
+                error: { msg: "Incorrect password" },
               });
               return;
             } else {
               var payload = {
                 user: {
                   id: result._id,
-                  admin: result.admin
-                }
+                  admin: result.admin,
+                },
               };
               await jwt.sign(
                 payload,
@@ -292,7 +280,7 @@ exports.user_login_post = [
         }
       );
     });
-  }
+  },
 ];
 
 exports.change_pass = [
@@ -320,7 +308,7 @@ exports.change_pass = [
       if (result == null) {
         res.json({
           saved: "unsuccessful",
-          error: { msg: "user does not exist" }
+          error: { msg: "user does not exist" },
         });
         return;
       } else {
@@ -328,7 +316,7 @@ exports.change_pass = [
         if (!isMatch) {
           res.json({
             saved: "unsuccessful",
-            error: { msg: "Incorrect password" }
+            error: { msg: "Incorrect password" },
           });
           return;
         } else {
@@ -344,9 +332,9 @@ exports.change_pass = [
             gender: result.gender,
             email: result.email,
             _id: req.user_detail.id,
-            trains_booked: result.trains_booked
+            trains_booked: result.trains_booked,
           });
-          await User.findByIdAndUpdate(user._id, user, err => {
+          await User.findByIdAndUpdate(user._id, user, (err) => {
             if (err) {
               throw err;
             }
@@ -355,7 +343,7 @@ exports.change_pass = [
         }
       }
     });
-  }
+  },
 ];
 
 exports.tickets = (req, res) => {
@@ -377,7 +365,7 @@ exports.paymentIds = (req, res) => {
       if (err) {
         throw err;
       }
-      let paymentIds = result.trains_booked.map(ticket => ticket.paymentId);
+      let paymentIds = result.trains_booked.map((ticket) => ticket.paymentId);
       res.json({ paymentIds: paymentIds });
     });
 };
