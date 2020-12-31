@@ -223,7 +223,7 @@ exports.user_login_post = [
       });
       return;
     }
-    const RECAPTCHA_SECRET = "6LdMetIUAAAAALUeAujOsFtdp1qj14QVnMa8B5Tn";
+    const RECAPTCHA_SECRET = "6LdD4-UUAAAAAAUvQUO6L13GK3wZ9v0CvIe244D3";
     var recaptcha_url = "https://www.google.com/recaptcha/api/siteverify?";
     recaptcha_url += "secret=" + RECAPTCHA_SECRET + "&";
     recaptcha_url += "response=" + req.body["g-recaptcha-response"] + "&";
