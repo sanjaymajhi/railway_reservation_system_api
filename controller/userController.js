@@ -143,59 +143,57 @@ exports.user_update_post = [
       });
       return;
     }
-    User.findOne({ _id: req.user_detail.id }, "_id email password").exec(
-      async (err, result) => {
-        if (err) {
-          throw err;
-        }
-        const isMatch = await bcrypt.compare(
-          req.body.password,
-          result.password
-        );
-        if (!isMatch) {
-          res.json({
-            saved: "unsuccessful",
-            error: { msg: "password not matched" },
-          });
-          return;
-        } else {
-          User.findOne({ email: req.body.email }, "_id").exec(
-            (err, founded_user) => {
-              if (err) {
-                throw err;
-              }
-              if (founded_user._id != req.user_detail.id) {
-                res.json({
-                  saved: "unsuccessful",
-                  error: { msg: "email already exists" },
-                });
-                return;
-              }
-            }
-          );
-          var salt = await bcrypt.genSalt(10);
-          var password = await bcrypt.hash(req.body.password, salt);
-          var user = new User({
-            f_name: req.body.f_name,
-            l_name: req.body.l_name,
-            dob: req.body.dob,
-            mobile: req.body.mobile,
-            username: req.body.username,
-            password: password,
-            gender: req.body.gender,
-            email: req.body.email,
-            _id: req.user_detail.id,
-            trains_booked: result.trains_booked,
-          });
-          await User.findByIdAndUpdate(user._id, user, (err) => {
+    User.findOne(
+      { _id: req.user_detail.id },
+      "_id email password trains_booked"
+    ).exec(async (err, result) => {
+      if (err) {
+        throw err;
+      }
+      const isMatch = await bcrypt.compare(req.body.password, result.password);
+      if (!isMatch) {
+        res.json({
+          saved: "unsuccessful",
+          error: { msg: "password not matched" },
+        });
+        return;
+      } else {
+        User.findOne({ email: req.body.email }, "_id").exec(
+          (err, founded_user) => {
             if (err) {
               throw err;
             }
-            res.json({ saved: "success" });
-          });
-        }
+            if (founded_user._id != req.user_detail.id) {
+              res.json({
+                saved: "unsuccessful",
+                error: { msg: "email already exists" },
+              });
+              return;
+            }
+          }
+        );
+        var salt = await bcrypt.genSalt(10);
+        var password = await bcrypt.hash(req.body.password, salt);
+        var user = new User({
+          f_name: req.body.f_name,
+          l_name: req.body.l_name,
+          dob: req.body.dob,
+          mobile: req.body.mobile,
+          username: req.body.username,
+          password: password,
+          gender: req.body.gender,
+          email: req.body.email,
+          _id: req.user_detail.id,
+          trains_booked: result.trains_booked,
+        });
+        await User.findByIdAndUpdate(user._id, user, (err) => {
+          if (err) {
+            throw err;
+          }
+          res.json({ saved: "success" });
+        });
       }
-    );
+    });
   },
 ];
 
